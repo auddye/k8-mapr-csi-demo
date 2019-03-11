@@ -18,8 +18,9 @@ Use the following hack around***
 ```kubectl -n kube-system edit configmap coredns
 remove the line that says "loop" ```
 
-```
-# wait to see the pods restart themselves
+
+wait to see the pods restart themselves
+````
 watch kubectl get pods --all-namespaces
 ```
 
@@ -29,7 +30,8 @@ git clone https://github.com/mapr/mapr-csi
 cd mapr-csi
 kubectl create -f deploy/kubernetes/csi-maprkdf-v1.0.0.yaml
 watch kubectl get pods --all-namespaces
-# wait for the csi-controller-kdf-0 and csi-nodeplugin-kdf to start ```
+```
+ wait for the csi-controller-kdf-0 and csi-nodeplugin-kdf to start
 
 # Static Provisioning 
 Static provisioning involves mounting a volume that already exists on the MapR Cluster to a pod. We will do this with 3 files: 
@@ -90,5 +92,5 @@ spec:
   resources:
     requests:
       storage: 5G
-      ```
+```
       
