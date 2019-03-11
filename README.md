@@ -118,30 +118,4 @@ kubectl get pv -n test-csi
 
 We are now ready to deploy our pod 
 teststaticpod.yaml
-```
-# Copyright (c) 2009 & onwards. MapR Tech, Inc., All rights reserved
-apiVersion: v1
-kind: Pod
-metadata:
-  name: test-static-pod
-  namespace: test-csi
-spec:
-  containers:
-  - name: busybox
-    image: busybox
-    args:
-    - sleep
-    - "1000000"
-    resources:
-      requests:
-        memory: "1Gi"
-        cpu: "500m"
-    volumeMounts:
-    - mountPath: /static
-      name: maprflex
-  volumes:
-    - name: maprflex
-      persistentVolumeClaim:
-        claimName: test-static-pvc
-        ```
 
