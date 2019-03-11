@@ -25,12 +25,11 @@ watch kubectl get pods --all-namespaces
 ```
 
 # Set Up MapR CSI Plugin 
-```
-git clone https://github.com/mapr/mapr-csi
+```git clone https://github.com/mapr/mapr-csi
 cd mapr-csi
 kubectl create -f deploy/kubernetes/csi-maprkdf-v1.0.0.yaml
-watch kubectl get pods --all-namespaces
-```
+watch kubectl get pods --all-namespaces```
+
  wait for the csi-controller-kdf-0 and csi-nodeplugin-kdf to start
 
 # Static Provisioning 
@@ -41,8 +40,7 @@ teststaticpvc.yaml
 
 
 teststaticpv.yaml example: 
-```
-# Copyright (c) 2009 & onwards. MapR Tech, Inc., All rights reserved
+```# Copyright (c) 2009 & onwards. MapR Tech, Inc., All rights reserved
 # apiVersion: v1
 # kind: PersistentVolume
 # metadata:
@@ -61,15 +59,12 @@ teststaticpv.yaml example:
 #       volumePath: "/static" # Default: "/"
 #       cluster: demo.mapr.com
 #       cldbHosts: maprdemo
-#       securityType: "Unsecure" # Default: Unsecure
-```
+#       securityType: "Unsecure" # Default: Unsecure```
 
 testprovisionerrestsecret.yaml example: 
-```
-# testprovisionerrestsecret.yaml 
-# Copyright (c) 2009 & onwards. MapR Tech, Inc., All rights reserved
-# apiVersion: v1
-# kind: Secret
+```Copyright (c) 2009 & onwards. MapR Tech, Inc., All rights reserved
+apiVersion: v1
+kind: Secret
 # metadata:
 #   name: mapr-provisioner-secrets
 #   namespace: test-csi
