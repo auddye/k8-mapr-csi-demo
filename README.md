@@ -1,6 +1,9 @@
 # k8-mapr-csi-demo
 The procedure will walk you through setting up a single kubernetes master/worker node in Virtualbox. Using the CSI driver will will mount a MapR Cluster volume to pods statically and dynamically. 
 
+To reference MapR provided test yamls see here: https://github.com/mapr/mapr-csi.git
+All yamls in this project were sourced from mapr-csi github and updated for local installation purposes. 
+
 Using Virtualbox 
 
 # Install kubeadm on Ubuntu
