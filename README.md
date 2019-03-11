@@ -6,26 +6,34 @@ Using Virtualbox
 # Install kubeadm on Ubuntu
 Start with an installation of Ubuntu 16.4 on Virtualbox 
 
-```sudo su
+```
+sudo su
 cd ~
-./k8-install.sh```
+./k8-install.sh
+```
 
 Your coredns pod will likely fail with CrashLoopBackOff error 
 Use the following hack around
 
-```kubectl -n kube-system edit configmap coredns```
+```
+kubectl -n kube-system edit configmap coredns
+```
 remove the line that says "loop"
 
 
 wait to see the pods restart themselves
-```watch kubectl get pods --all-namespaces```
+```
+watch kubectl get pods --all-namespaces
+```
 
 # Set Up MapR CSI Plugin 
 
-```git clone https://github.com/mapr/mapr-csi
+```
+git clone https://github.com/mapr/mapr-csi
 cd mapr-csi
 kubectl create -f deploy/kubernetes/csi-maprkdf-v1.0.0.yaml
-watch kubectl get pods --all-namespaces```
+watch kubectl get pods --all-namespaces
+```
 wait for the csi-controller-kdf-0 and csi-nodeplugin-kdf to start
 
 # Static Provisioning 
@@ -36,7 +44,8 @@ teststaticpvc.yaml
 
 
 teststaticpv.yaml example: 
-```# Copyright (c) 2009 & onwards. MapR Tech, Inc., All rights reserved
+```
+# Copyright (c) 2009 & onwards. MapR Tech, Inc., All rights reserved
 # apiVersion: v1
 # kind: PersistentVolume
 # metadata:
@@ -55,10 +64,12 @@ teststaticpv.yaml example:
 #       volumePath: "/static" # Default: "/"
 #       cluster: demo.mapr.com
 #       cldbHosts: maprdemo
-#       securityType: "Unsecure" # Default: Unsecure```
+#       securityType: "Unsecure" # Default: Unsecure
+```
 
 testprovisionerrestsecret.yaml example: 
-```Copyright (c) 2009 & onwards. MapR Tech, Inc., All rights reserved
+```
+Copyright (c) 2009 & onwards. MapR Tech, Inc., All rights reserved
 apiVersion: v1
 kind: Secret
 # metadata:
@@ -70,6 +81,7 @@ kind: Secret
 #   MAPR_CLUSTER_PASSWORD: bWFwcg==
 ```
 
+teststaticpvc.yaml
 ```
 # Copyright (c) 2009 & onwards. MapR Tech, Inc., All rights reserved
 kind: PersistentVolumeClaim
@@ -85,3 +97,51 @@ spec:
       storage: 5G
 ```
       
+# Create Static Volume on MapR Cluster
+maprcli volume create -name static -path /static
+
+Use kubectl to create all the services 
+```
+#start by creating a namespace
+kubectl apply -f testnamespace.yaml
+# Deploy the secrets which the drivers uses to connect to the MapR cluster 
+kubectl create -f testprovisionerrestsecret.yaml
+# Create a persistant volume description that matches the volume we created or "/" 
+kubectl create -f teststaticpv.yaml
+# Bind a persistant volume claim  with a persistant volume
+kubectl create -f teststaticpvc.yaml
+```
+
+Check that the claims are bound with the following commands 
+kubectl get pvc -n test-csi
+kubectl get pv -n test-csi
+
+We are now ready to deploy our pod 
+teststaticpod.yaml
+```
+# Copyright (c) 2009 & onwards. MapR Tech, Inc., All rights reserved
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-static-pod
+  namespace: test-csi
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    args:
+    - sleep
+    - "1000000"
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: "500m"
+    volumeMounts:
+    - mountPath: /static
+      name: maprflex
+  volumes:
+    - name: maprflex
+      persistentVolumeClaim:
+        claimName: test-static-pvc
+        ```
+
