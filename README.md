@@ -1,7 +1,7 @@
 # k8-mapr-csi-demo
 The procedure will walk you through setting up a single kubernetes master/worker node in Virtualbox. Using the CSI driver will will mount a MapR Cluster volume to pods statically and dynamically. 
 
-To reference MapR provided test yamls see here: https://github.com/mapr/mapr-csi.git
+To reference MapR provided test yamls see here: [mapr-csi github!](https://github.com/mapr/mapr-csi.git)
 All yamls in this project were sourced from mapr-csi github and updated for local installation purposes. 
 
 Using Virtualbox 
@@ -11,7 +11,7 @@ Start with an installation of Ubuntu 16.4 on Virtualbox
 Networking: NAT , Host-only 
 CPU: 2 
 
-MapR Sandbox for Hadoop 6.1 https://mapr.com/docs/61/SandboxHadoop/t_install_sandbox_vbox.html#task_kjv_45t_zs
+[MapR Sandbox for Hadoop 6.1!] (https://mapr.com/docs/61/SandboxHadoop/t_install_sandbox_vbox.html#task_kjv_45t_zs)
 
 
 
@@ -20,8 +20,8 @@ MapR Sandbox for Hadoop 6.1 https://mapr.com/docs/61/SandboxHadoop/t_install_san
 
 
 Next Install kubeadm 
-Resources: https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network
-https://kubernetes.io/docs/setup/independent/install-kubeadm/
+Resources: [Creating Cluster Reference!](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network)
+[Install kubeadm!](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
 
 ```
 apt-get update && apt-get install -y apt-transport-https curl
@@ -41,7 +41,7 @@ cd ~
 ./k8-install.sh
 ```
 
-Your coredns pod will likely fail with CrashLoopBackOff error 
+Your coredns pod will likely fail with **CrashLoopBackOff** error 
 Use the following hack around
 
 ```
@@ -67,9 +67,9 @@ wait for the csi-controller-kdf-0 and csi-nodeplugin-kdf to start
 
 # Static Provisioning 
 Static provisioning involves mounting a volume that already exists on the MapR Cluster to a pod. We will do this with 3 files: 
-teststaticpv.yaml
-testprovisionerrestsecret.yaml
-teststaticpvc.yaml
+*teststaticpv.yaml
+*testprovisionerrestsecret.yaml
+*teststaticpvc.yaml
 
 
 teststaticpv.yaml example: 
@@ -195,10 +195,10 @@ kubectl delete -f testprovisionerrestsecret.yaml
 Dynamic provisioning means a volume does not already exist on the MapR cluster and by using a storage class and a persistent volume claim the driver will provision the volume for us. 
 
 Will will be using the following yamls for dynamic provisioning: 
-testnamespace.yaml
-testprovisionerrestsecret.yaml
-testunsecurestorageclass.yaml
-testdynamicpvc.yaml
-testdynamicpod.yaml
+*testnamespace.yaml
+*testprovisionerrestsecret.yaml
+*testunsecurestorageclass.yaml
+*testdynamicpvc.yaml
+*testdynamicpod.yaml
 
 
