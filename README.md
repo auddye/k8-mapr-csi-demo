@@ -71,8 +71,14 @@ Static provisioning involves mounting a volume that already exists on the MapR C
 *testprovisionerrestsecret.yaml
 *teststaticpvc.yaml
 
+#Persistant Volume
+The reclaimPolicy specified in the PersistentVolume tells the k8 cluster what will happen to the volume when the PVC is deleted. Volumes can be set to Retain or Delete.
 
+Retain: means the volume will be released when a claim is deleted, but it's not ready for another claim yet. There are manual steps to do to make this volume available for another PVC. 
+
+Delete: removes the PersistentVolume object and the storage asset. When we get to dynamic provisioning you will see that PV inherit the reclaimPolicy of the storage class, which defaults to Delete
 teststaticpv.yaml example: 
+
 ```
 # Copyright (c) 2009 & onwards. MapR Tech, Inc., All rights reserved
 # apiVersion: v1
@@ -133,16 +139,24 @@ maprcli volume create -name static -path /static
 ```
 
 Use kubectl to create all the services 
-```
+
 #start by creating a namespace
+```
 kubectl apply -f testnamespace.yaml
+```
 # Deploy the secrets which the drivers uses to connect to the MapR cluster 
+```
 kubectl create -f testprovisionerrestsecret.yaml
+```
 # Create a persistant volume description that matches the volume we created or "/" 
+```
 kubectl create -f teststaticpv.yaml
+```
 # Bind a persistant volume claim  with a persistant volume
+```
 kubectl create -f teststaticpvc.yaml
 ```
+
 
 Check that the claims are bound with the following commands 
 kubectl get pvc -n test-csi
@@ -175,9 +189,10 @@ Check that your volume is in the same state you left it in:
 ssh mapr@maprdemo hadoop fs -ls /static/
 ```
 
-Recreate the pod and write another file to pick up where you left off: 
+Recreate the pod and write another file to pick up where you left off, and add a second pod to demonstration many to one relationship: 
 ```
 kubectl create -f teststaticpod.yaml
+kubectl create -f teststaticpod2.yaml
 kubectl exec -it test-static-pod2 -n test-csi -- dd if=/dev/zero of=/static/test2.dat bs=1M count=10
 ```
 
