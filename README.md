@@ -8,6 +8,25 @@ Using Virtualbox
 
 # Install kubeadm on Ubuntu
 Start with an installation of Ubuntu 16.4 on Virtualbox 
+Networking: NAT , Host-only 
+CPU: 2 
+
+
+Next Install kubeadm 
+Resources: https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network
+https://kubernetes.io/docs/setup/independent/install-kubeadm/
+
+```
+apt-get update && apt-get install -y apt-transport-https curl
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+apt-get update
+apt-get install -y kubelet kubeadm kubectl
+apt-mark hold kubelet kubeadm kubectl
+```
+
 
 ```
 sudo su
@@ -101,7 +120,10 @@ spec:
 ```
       
 # Create Static Volume on MapR Cluster
+On your mapr cluster 
+```
 maprcli volume create -name static -path /static
+```
 
 Use kubectl to create all the services 
 ```
@@ -120,5 +142,34 @@ kubectl get pvc -n test-csi
 kubectl get pv -n test-csi
 
 We are now ready to deploy our pod 
-teststaticpod.yaml
+```
+kubectl create -f teststaticpod.yaml
+watch kubectl get pods --all-namespaces
+```
 
+Let's test our /static mount point by writing some data to /static/test.dat
+ 
+
+kubectl exec -it test-static-pod -n test-csi -- dd if=/dev/zero of=/static/test.dat bs=1M count=10
+kubectl exec -it test-static-pod -n test-csi -- ls -l /static/test.dat
+
+
+You can also list the file like this: 
+ssh mapr@maprdemo hadoop fs -ls /static/
+
+The data is saved to the persistent volume, so when pods get deleted or restarted there is no affect to the data volume 
+
+```
+kubectl delete -f teststaticpod.yaml
+```
+
+Check that your volume is in the same state you left it in: 
+```
+ssh mapr@maprdemo hadoop fs -ls /static/
+```
+
+Recreate the pod and write another file to pick up where you left off: 
+```
+kubectl create -f teststaticpod.yaml
+kubectl exec -it test-static-pod2 -n test-csi -- dd if=/dev/zero of=/static/test2.dat bs=1M count=10
+```
