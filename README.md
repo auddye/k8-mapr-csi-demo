@@ -195,10 +195,10 @@ kubectl delete -f testprovisionerrestsecret.yaml
 Dynamic provisioning means a volume does not already exist on the MapR cluster and by using a storage class and a persistent volume claim the driver will provision the volume for us. 
 
 Will will be using the following yamls for dynamic provisioning: 
-*testnamespace.yaml
-*testprovisionerrestsecret.yaml
-*testunsecurestorageclass.yaml
-*testdynamicpvc.yaml
-*testdynamicpod.yaml
+- testnamespace.yaml
+- testprovisionerrestsecret.yaml
+- testunsecurestorageclass.yaml
+- testdynamicpvc.yaml
+- testdynamicpod.yaml
 
 
