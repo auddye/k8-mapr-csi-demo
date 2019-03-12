@@ -1,7 +1,7 @@
 # k8-mapr-csi-demo
 The procedure will walk you through setting up a single kubernetes master/worker node in Virtualbox. Using the CSI driver will will mount a MapR Cluster volume to pods statically and dynamically. 
 
-To reference MapR provided test yamls see here: [mapr-csi github!](https://github.com/mapr/mapr-csi.git)
+To reference MapR provided test yamls see here: [mapr-csi github](https://github.com/mapr/mapr-csi.git)
 All yamls in this project were sourced from mapr-csi github and updated for local installation purposes. 
 
 Using Virtualbox 
@@ -11,7 +11,7 @@ Start with an installation of Ubuntu 16.4 on Virtualbox
 Networking: NAT , Host-only 
 CPU: 2 
 
-[MapR Sandbox for Hadoop 6.1!] (https://mapr.com/docs/61/SandboxHadoop/t_install_sandbox_vbox.html#task_kjv_45t_zs)
+[MapR Sandbox for Hadoop 6.1](https://mapr.com/docs/61/SandboxHadoop/t_install_sandbox_vbox.html#task_kjv_45t_zs)
 
 
 
@@ -20,8 +20,8 @@ CPU: 2
 
 
 Next Install kubeadm 
-Resources: [Creating Cluster Reference!](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network)
-[Install kubeadm!](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
+Resources: [Creating Cluster Reference](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network)
+[Install kubeadm](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
 
 ```
 apt-get update && apt-get install -y apt-transport-https curl
