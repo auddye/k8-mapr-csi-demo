@@ -140,19 +140,19 @@ maprcli volume create -name static -path /static
 
 Use kubectl to create all the services 
 
-#start by creating a namespace
+Start by creating a namespace
 ```
 kubectl apply -f testnamespace.yaml
 ```
-# Deploy the secrets which the drivers uses to connect to the MapR cluster 
+Deploy the secrets which the drivers uses to connect to the MapR cluster 
 ```
 kubectl create -f testprovisionerrestsecret.yaml
 ```
-# Create a persistant volume description that matches the volume we created or "/" 
+Create a persistant volume description that matches the volume we created or "/" 
 ```
 kubectl create -f teststaticpv.yaml
 ```
-# Bind a persistant volume claim  with a persistant volume
+Bind a persistant volume claim  with a persistant volume
 ```
 kubectl create -f teststaticpvc.yaml
 ```
