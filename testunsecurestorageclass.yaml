@@ -1,0 +1,17 @@
+# Copyright (c) 2009 & onwards. MapR Tech, Inc., All rights reserved
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: test-dynamic-sc
+  namespace: test-csi
+provisioner: com.mapr.csi-kdf
+parameters:
+    csiProvisionerSecretName: "mapr-provisioner-secrets"
+    csiProvisionerSecretNamespace: "test-csi"
+    restServers: 192.168.0.18
+    cldbHosts: maprdemo
+    cluster: demo.mapr.com
+    securityType: unsecure # Default: unsecure
+    namePrefix: dynamic
+    mountPrefix: /
+    advisoryquota: 1000M
