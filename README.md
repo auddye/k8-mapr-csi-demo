@@ -6,10 +6,17 @@ All yamls in this project were sourced from mapr-csi github and updated for loca
 
 Using Virtualbox 
 
-# Install kubeadm on Ubuntu
+Ubuntu : 
 Start with an installation of Ubuntu 16.4 on Virtualbox 
 Networking: NAT , Host-only 
 CPU: 2 
+
+MapR Sandbox for Hadoop 6.1 https://mapr.com/docs/61/SandboxHadoop/t_install_sandbox_vbox.html#task_kjv_45t_zs
+
+
+
+# Install kubeadm on Ubuntu
+
 
 
 Next Install kubeadm 
@@ -173,3 +180,25 @@ Recreate the pod and write another file to pick up where you left off:
 kubectl create -f teststaticpod.yaml
 kubectl exec -it test-static-pod2 -n test-csi -- dd if=/dev/zero of=/static/test2.dat bs=1M count=10
 ```
+
+Clean up to save resources on your machine 
+```
+kubectl delete -f teststaticpod.yaml
+kubectl delete -f teststaticpvc.yaml
+kubectl delete -f teststaticpv.yaml
+kubectl delete -f testprovisionerrestsecret.yaml
+```
+
+
+# Dynamic Provisioning of a MapR Volume 
+
+Dynamic provisioning means a volume does not already exist on the MapR cluster and by using a storage class and a persistent volume claim the driver will provision the volume for us. 
+
+Will will be using the following yamls for dynamic provisioning: 
+testnamespace.yaml
+testprovisionerrestsecret.yaml
+testunsecurestorageclass.yaml
+testdynamicpvc.yaml
+testdynamicpod.yaml
+
+
