@@ -202,3 +202,44 @@ Will will be using the following yamls for dynamic provisioning:
 - testdynamicpod.yaml
 
 
+If you ran the static provisioning part already you will already have the csi driver started and the test namespace running. If you are starting at this step then you will need to run the following: 
+```
+kubectl create -f deploy/kubernetes/csi-maprkdf-v1.0.0.yaml
+watch kubectl get pods --all-namespaces
+kubectl apply -f testnamespace.yaml
+```
+
+Deploy the secret used to connect to the MapR cluster
+```
+kubectl create -f testprovisionerrestsecret.yaml
+```
+
+Create a K8 storage class, this step is different than static provisioning. This unsecurestorageclass.yaml has an important piece of information that will dictate what happends to our volume if we delete the persistent volume claim. 
+
+```
+kubectl create -f testunsecurestorageclass.yaml
+```
+
+Bind the PVC (persistent volume claim) to the storage class just created 
+```
+kubectl create -f testdynamicpvc.yaml
+```
+
+Check that the pvc request is **Bound**
+```
+watch kubectl get pvc -n test-csi
+```
+The PVC will execute a persistent volume for you based on the storage class
+```
+kubectl describe pv -n test-csi | grep volumePath | cut -f 3 -d "/"
+```
+
+Deploy the pod 
+```
+kubectl create -f testdynamicpod.yaml
+```
+
+Save files to the new volume 
+```
+kubectl exec -it test-dynamic-pod -n test-csi -- dd if=/dev/zero of=/dynamic/test.dat bs=1M count=10
+```
